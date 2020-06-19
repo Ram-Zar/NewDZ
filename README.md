@@ -1,2 +1,0 @@
-# NewDZ
-#And NewDz
