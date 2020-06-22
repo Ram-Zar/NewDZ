@@ -74,7 +74,7 @@ public:
 		m_balance.SetAcc(R, K);
 		if (delta/20>1)
 		{
-			cout << "\nјккаунт зарегистрирован "<<delta<< " недель назад";
+			cout << "\nјккаунт зарегистрирован "<<delta/20<< " мес€ца(цев) назад";
 		}
 	}
 	void Print_Num()
