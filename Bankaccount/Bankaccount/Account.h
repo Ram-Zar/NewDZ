@@ -22,11 +22,8 @@ private:
 
 	long long ProcSec()
 	{
-		static time_t prev_t = reg_time;
 		time_t t = time(NULL);
-		time_t delta = t - prev_t;
-		prev_t = t;
-		return delta;
+		return t-reg_time;
 	}
 public:
 	Account()
@@ -69,18 +66,15 @@ public:
 	}
 	void Per_cent_plus()
 	{
-		long long t = time(NULL);
-		long long delta = ProcSec()/30;
-		if (delta >= 2)
+		long long delta = ProcSec();
+		m_per_cent += delta/20 * 0.01;
+		unsigned char _value_ = unsigned char(m_balance.m_k * (1 + m_per_cent / 100.0));
+		unsigned char K = _value_%100;
+		long R = long(m_balance.m_main * (1 + m_per_cent/100.0))+_value_/100;
+		m_balance.SetAcc(R, K);
+		if (delta/20>1)
 		{
-			m_per_cent += delta * 0.01;
-		    long R = long(m_balance.m_main * (1 + m_per_cent/100.0));
-		    unsigned char K = unsigned char(m_balance.m_k * (1 + m_per_cent));
-		    m_balance.SetAcc(R, K);
-		}	
-		if ((t-reg_time)/30 >= 5)
-		{
-			cout << "\nАккаунт зарегистрирован "<<t-reg_time<< " дней назад";
+			cout << "\nАккаунт зарегистрирован "<<delta<< " недель назад";
 		}
 	}
 	void Print_Num()
