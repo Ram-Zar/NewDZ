@@ -19,9 +19,35 @@ int main()
 		switch (choice)
 		{
 		case '1':
-		{
-			a = new Account;
-			cin >> *a;
+		{			
+			string surname,date;
+			double per_cent;
+			long R;
+	        unsigned int K;
+			cout << "Введите фамилию:";
+	         cin >> surname;
+	         while (surname[0]=='\0')
+	         {
+		         cout << "Введите фамилию:";
+		         cin >> surname;
+	         }
+	         cout << "\nВведите назначенный процент начисления\nПроцент=";//нужно обработать некорректный польз. ввод
+	         cin >>  per_cent;
+			  while (( per_cent == 0.0)||( per_cent<0))
+			 {
+				 cout << "\nНеккоректный ввод!! Введите назначенный процент начисления\nПроцент=";
+				 cin >>   per_cent;
+			 }
+	         cout << "\nВведите сумму в рублях. Формат: 00,00\nСумма=";//и тут тоже
+	         scanf_s("%ld%*c%u", &R, &K);
+	         while ((R < 0)||((K==0)&&(R==0)))
+	         {
+		         cout << "\nНеккоректный ввод!! Введите сумму в рублях. Формат: 00,00\nСумма=";
+		         scanf_s("%ld%*c%u", &R, &K);
+	         }
+	         cout << "\nВведите сегодняшнюю дату. Формат:ГГГГ.MM.ДД: ";
+	         cin >> date;
+			 a = new Account{surname,per_cent,R,unsigned char(K),date};
 		}break;
 		case '2':
 		{
@@ -107,7 +133,6 @@ int main()
 			delete a;
 			a = nullptr;
 		}break;
-		
 		default:break;
 	    }
 		cout<<"\ninput>>";

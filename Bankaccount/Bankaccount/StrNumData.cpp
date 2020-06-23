@@ -33,7 +33,11 @@ int StrNumData::_Search_(string buff[], int summ,int kopeyki)
 		}
 		else
 		{
-			if (kopeyki % 10 != 0)
+			if ((count % 3 == 0) && ((kopeyki % 10 == 1) || (kopeyki % 10 == 2)))
+			{
+				buff[i].append(data1[kopeyki % 10 - 1][3]);
+			}
+			else 
 			{
 				buff[i].append(data1[kopeyki % 10 - 1][count % 3]);
 			}			

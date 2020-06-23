@@ -22,7 +22,7 @@ class Money
 	unsigned char C05 = 0;
 
 	void distributor();//calculates an anmount of bank_notes
-	
+
 public:
 	Money() {};
 	Money(long R, int k)
@@ -33,27 +33,30 @@ public:
 	}
 	void print()
 	{
-		cout <<m_main << "," << (int)m_k;
+		cout << m_main << "," << (int)m_k;
 	}
-	
-	int SetAcc(long R, int K)
+
+	bool SetSum(long R, int K)
 	{
 		if ((K < 0) || (R < 0))
 		{
 			return 1;
 		}
-		if (K >= 100)
-		{
-			m_k = K%100;
-			m_main = R+K/100;
-		}
 		else
 		{
-			m_k = K;
-			m_main = R;
-		}	
+			m_k = K % 100;
+			m_main = R + K / 100;
+		}
 		distributor();
 		return 0;
+	}
+	long GetRubles()const
+	{
+		return m_main;
+	}
+	unsigned char GetKopeyki()const
+	{
+		return m_k;
 	}
 	friend Money operator+(const Money& m, const Money& n)
 	{
@@ -83,27 +86,6 @@ public:
 		unsigned char K = (int)(total * 100.0) % 100;
 		return Money(R, K);
 	}
-	friend Money operator*(const Money& m, double n)
-	{
-		double total = ((double)m.m_main * 100 + m.m_k) * n / 100;
-		long R = int(total);
-		unsigned char K = (int)(total * 100) % 100;
-		return Money(R, K);
-	}
-	friend Money operator*(double n, const Money& m)
-	{
-        // НАДО ПОМЕНЯТЬ МЕСТАМИ АРГУМЕНТЫ И ВЫЗВАТЬ ОПЕРАТОР,
-        // КОТОРЫЙ ОПРЕДЕЛЁН ВЫШЕ, ЧТОБЫ НЕ ДУБЛИРОВАТЬ КОД
-        // И УБРАИТЬ ФУНКЦИЮ ИЗ ДРУЗЕЙ, ТАК КАК ЕЙ ДОСТУП К ВНУТРЕННЕЙ
-        // СТРУКТУРЕ БУДЕТ НЕ НУЖЕН
-        // ВООБЩЕ ДУБЛИРОВАНИЕ КОДА - ПОТЕНЦИАЛЬНЫЙ ИСТОЧНИК ОШИБОК,
-        // СТАРАЙСЯ ЭТОГО ИЗБЕГАТЬ, КРОМЕ ТОГО, УВЕЛИЧИВАЕТСЯ ТЕКСТ КОДА,
-        // ЧТО ТОЖЕ ПЛОХО
-		double total = ((double)m.m_main * 100 + m.m_k) * n / 100;
-		long R = int(total);
-		unsigned char K = (int)(total * 100) % 100;
-		return Money(R, K);
-	}
 	bool operator>(const Money& m)
 	{
 		return (m_main * 100 + m_k > m.m_main * 100 + m.m_k);
@@ -112,38 +94,33 @@ public:
 	{
 		return (m_main * 100 + m_k < m.m_main * 100 + m.m_k);
 	}
-	bool operator>=(const Money& m)
+	bool operator>=(const Money& m)//СДЕЛАНО
 	{
-        // ЗДЕСЬ ЛУЧШЕ ПОЛЬЗОВАТЬСЯ ТЕМИ ОПЕРАТОРАМИ, КОТОРЫЕ УЖЕ ЕСТЬ:
-        // return !(*this < m);
-        // НУ И ДРУГИЕ ОПЕРАЦИИ МОЖНО АНАЛОГИЧНО ВЫРАЗИТЬ ЧЕРЕЗ НЕБОЛЬШОЙ
-        // НАБОР БАЗОВЫХ
-		return (m_main * 100 + m_k >= m.m_main * 100 + m.m_k);
+		return !(*this < m);
 	}
 	bool operator<=(const Money& m)
 	{
-		return (m_main * 100 + m_k <= m.m_main * 100 + m.m_k);
-	}
-	bool operator!=(const Money& m)
-	{
-		return (m_main * 100 + m_k != m.m_main * 100 + m.m_k);
+		return !(*this>m);
 	}
 	bool operator==(const Money& m)
 	{
 		return (m_main * 100 + m_k == m.m_main * 100 + m.m_k);
 	}
+	bool operator!=(const Money& m)
+	{
+		return !(*this==m);
+	}
 	operator double()
 	{
 		return (double(m_main) * 100.0 + double(m_k)) / 100.0;
 	}
-	bool operator==(double n)
+	bool operator==(double n)//сначала сделала сложным способом, на начали происходить страшные вещи, поэтому остановилась на том, что попроще
 	{
-        // ЧИСЛА С ПЛАВАЮЩЕЙ ЗАПЯТОЙ НЕЛЬЗЯ СРАВНИВАТЬ НА ТОЧНОЕ РАВЕНСТВО
-        // ПРИ ПОМОЩИ ОПЕРАТОРА ==
-        // https://habr.com/en/post/112953/
-        // ПОЧИТАЙ СТАТЬЮ, МОЖНО ИСПОЛЬЗОВАТЬ САМЫЙ ПРОСТОЙ СПОСОБ ИЗ ТЕХ,
-        // ЧТО ТАМ ОПИСАНЫ
-		return (double(*this) == n);
+		if (abs(double(*this) - n) < 0.00000001)
+		{
+			return true;
+		}
+		return false;
 	}
 	bool operator==(int n)
 	{
@@ -151,3 +128,5 @@ public:
 	}
 	friend class Account;
 };
+Money operator*(const Money& m, double n);
+Money operator*(double n, const Money& m);

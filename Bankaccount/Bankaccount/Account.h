@@ -29,25 +29,25 @@ public:
 	Account()
 	{
 	}
+	Account(string surname, double per_cent, long R, unsigned char K, string date)//ÄÎÁÀÂËÅÍÎ
+	{
+		m_surname = surname;
+		m_per_cent = per_cent;
+		m_balance.SetSum(R, K);
+		m_date(date.c_str());
+		reg_time = time(NULL);	
+		m_AcNum=++s_AcNum;
+	}
+	//void SetAccount
 	void AccView();
 	bool GetCash(int R, int K);
-    // ÂÌÅÑÒÎ ÝÒÎÃÎ ÎÏÅÐÀÒÎÐÀ ÄÎËÆÅÍ ÁÛÒÜ ÊÎÍÑÒÐÓÊÒÎÐ, ÊÎÒÎÐÛÉ ÈÍÈÖÈÀËÈÇÈÐÓÅÒ
-    // ÂÑÅ ×ËÅÍÛ ÊËÀÑÑÀ, ÒÎ ÅÑÒÜ Â ÔÓÍÊÖÈÈ, ÊÎÒÎÐÀß ÈÑÏÎËÜÇÓÅÒ ÊËÀÑÑ Account,
-    // ÑÍÀ×ÀËÀ Ó ÏÎËÜÇÎÂÀÒÅËß ÇÀÏÐÀØÈÂÀÞÒÑß ÄÀÍÍÛÅ m_surname, m_per_cent, m_balance,
-    // È Ò.Ä., À ÏÎÒÎÌ ÂÑÅ ÎÍÈ ÏÅÐÅÄÀÞÒÑß Â ÊÎÍÑÒÐÓÊÒÎÐ È ÑÎÇÄÀ¨ÒÑß ÎÁÚÅÊÒ Account
-    // ÌÅÍßÒÜ ÂÍÓÒÐÅÍÍÅ ÑÎÄÅÐÆÈÌÎÅ ÊËÀÑÑÀ ÏÐÈ ÏÎÌÎÙÈ operator>> ÍÅ ÑÀÌÀß
-    // ÕÎÐÎØÀß ÈÄÅß. ÝÒÎ ÄÎËÆÍÛ ÄÅËÀÒÜ ÑÏÅÖÈÀËÜÍÛÅ ÔÓÍÊÖÈÈ Ñ ÃÎÂÎÐßÙÈÌÈ ÈÌÅÍÀÌÈ,
-    // ÍÀÏÐÈÌÅÐ, void SetName(std::string), void SetBalance(double), void SetPercent(double)
-    // À ÂÎÒ ÄËß ÂÛÂÎÄÀ ÓÄÎÁÍÎ ÈÑÏÎËÜÇÎÂÀÒÜ ÎÏÅÐÀÒÎÐ È ÏÐÈ ÝÒÎÌ
-    // ÎÍ ÍÅ ÁÓÄÅÒ ÍÀÐÓØÀÒÜ ÂÍÓÒÐÅÍÍÅÉ ÑÒÐÓÊÒÓÐÛ ÎÁÚÅÊÒÀ
-	friend istream& operator>>(istream& in, Account& a);
 	bool PutCash(int R, int K)
 	{
 		Money temp(R, K);
 		if (double(temp) > 0)
 		{
 			m_balance = m_balance+temp;
-			cout << "\nÂâåäåííàÿ ñóììà: " << R << "," << K << "\nÁàëàíñå: ";
+			cout << "\nÂâåäåííàÿ ñóììà: " << R << "," << K << "\nÁàëàíñ: ";
 			m_balance.print();
 			return 0;
 		}
@@ -80,7 +80,7 @@ public:
 		unsigned char _value_ = unsigned char(m_balance.m_k * (1 + m_per_cent / 100.0));
 		unsigned char K = _value_%100;
 		long R = long(m_balance.m_main * (1 + m_per_cent/100.0))+_value_/100;
-		m_balance.SetAcc(R, K);
+		m_balance.SetSum(R, K);
 		if (delta/20>1)
 		{
 			cout << "\nÀêêàóíò çàðåãèñòðèðîâàí "<<delta/20<< " ìåñÿöà(öåâ) íàçàä";
